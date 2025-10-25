@@ -125,109 +125,126 @@ const TextForm = (props) => {
       className={`min-h-screen py-8 ${props.theme === "light" ? "text-gray-900" : "text-white"
         }`}
     >
-      <div className="container mx-auto px-10 lg:gap-5  lg:flex">
-        <div className="mb-6" data-aos="fade-down" data-aos-duration="800">
-          <h1 className="text-3xl font-bold mb-6">{t("textForm.title")}</h1>
+      <div className="container mx-auto px-8">
+        <div className="lg:flex lg:gap-8 ">
+          <div className="mb-6 lg:w-70/100" data-aos="fade-down" data-aos-duration="800">
+            <h1 className="text-3xl font-bold mb-6">{t("textForm.title")}</h1>
 
-          <Toolbar
-            textOperations={textOperations}
-            theme={props.theme}
-            colorTheme={props.colorTheme}
-            loadingGrammar={loadingGrammar}
-            text={text}
-            activeStyles={{
-              Bold: isBold,
-              Italic: isItalic,
-              Underline: isUnderline,
-              Strikethrough: isStrike,
-            }}
-          />
+            <Toolbar
+              textOperations={textOperations}
+              theme={props.theme}
+              colorTheme={props.colorTheme}
+              loadingGrammar={loadingGrammar}
+              text={text}
+              activeStyles={{
+                Bold: isBold,
+                Italic: isItalic,
+                Underline: isUnderline,
+                Strikethrough: isStrike,
+              }}
+            />
 
-          <textarea
-            className={`w-full p-4 rounded-lg border-2 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 ${props.theme === "light"
-              ? "bg-white border-gray-300 text-gray-900"
-              : "bg-gray-700 border-gray-500 text-white"
-              }`}
-            rows="10"
-            value={text}
-            onChange={handleChange}
-            placeholder={t("textForm.placeholder")}
-          ></textarea>
+            <textarea
+              className={`w-full p-4 h-[80%] rounded-lg border-2 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 ${props.theme === "light"
+                ? "bg-white border-gray-300 text-gray-900"
+                : "bg-gray-700 border-gray-500 text-white"
+                }`}
+              rows="10"
+              value={text}
+              onChange={handleChange}
+              placeholder={t("textForm.placeholder")}
+            ></textarea>
 
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept=".txt"
-            className="hidden"
-            onChange={(e) =>
-              handleFileImport(e.target.files && e.target.files[0])
-            }
-          />
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept=".txt"
+              className="hidden"
+              onChange={(e) =>
+                handleFileImport(e.target.files && e.target.files[0])
+              }
+            />
 
-          {/* Grammar results (inline, styled like Summary) - moved here to sit just below textarea and before function buttons */}
-          {grammarResults && grammarResults.length > 0 && (
-            <section data-aos="fade-up" data-aos-delay="200">
-              <h2
-                className={`text-2xl sm:text-3xl font-bold mb-4 text-center tracking-tight ${props.theme === "light" ? "text-gray-800" : "text-gray-100"
-                  }`}
-              >
-                Grammar issues
-              </h2>
+            {/* Grammar results (inline, styled like Summary) - moved here to sit just below textarea and before function buttons */}
+            {grammarResults && grammarResults.length > 0 && (
+              <section data-aos="fade-up" data-aos-delay="200">
+                <h2
+                  className={`text-2xl sm:text-3xl font-bold mb-4 text-center tracking-tight ${props.theme === "light" ? "text-gray-800" : "text-gray-100"
+                    }`}
+                >
+                  Grammar issues
+                </h2>
 
-              <div className="grid grid-cols-1 gap-4 mb-8">
-                <div className={`w-full p-4 rounded-xl border shadow-sm transition-all duration-300 ${props.theme === "light"
-                  ? "bg-gradient-to-r from-yellow-200 to-yellow-300 border-yellow-400"
-                  : "bg-gradient-to-r from-gray-800 to-gray-700 border-gray-700"
-                  }`}>
-                  <div className="flex items-center justify-between mb-3">
-                    <strong className="text-lg">Summary of Issues</strong>
-                    <div className="flex items-center gap-2">
-                      <span className="text-sm text-gray-600 dark:text-gray-300">{grammarResults.length} found</span>
-                      <button
-                        aria-label="Clear grammar issues"
-                        onClick={() => setGrammarResults([])}
-                        className="ml-2 text-sm font-medium px-2 py-1 rounded hover:bg-gray-200 dark:hover:bg-gray-700"
-                      >
-                        Clear
-                      </button>
+                <div className="grid grid-cols-1 gap-4 mb-8">
+                  <div className={`w-full p-4 rounded-xl border shadow-sm transition-all duration-300 ${props.theme === "light"
+                    ? "bg-gradient-to-r from-yellow-200 to-yellow-300 border-yellow-400"
+                    : "bg-gradient-to-r from-gray-800 to-gray-700 border-gray-700"
+                    }`}>
+                    <div className="flex items-center justify-between mb-3">
+                      <strong className="text-lg">Summary of Issues</strong>
+                      <div className="flex items-center gap-2">
+                        <span className="text-sm text-gray-600 dark:text-gray-300">{grammarResults.length} found</span>
+                        <button
+                          aria-label="Clear grammar issues"
+                          onClick={() => setGrammarResults([])}
+                          className="ml-2 text-sm font-medium px-2 py-1 rounded hover:bg-gray-200 dark:hover:bg-gray-700"
+                        >
+                          Clear
+                        </button>
+                      </div>
                     </div>
-                  </div>
 
-                  <div className="space-y-3">
-                    {grammarResults.map((item, idx) => (
-                      <div key={item.id || idx} className={`p-3 rounded-md border ${props.theme === 'light' ? 'border-blue-50' : 'border-gray-600'}`}>
-                        <div className="flex items-start justify-between">
-                          <div>
-                            <p className="text-sm font-semibold">{item.message}</p>
-                            {item.context && item.context.text && (
-                              <p className="text-xs mt-1 text-gray-500">"{item.context.text}"</p>
-                            )}
-                            {item.replacements && item.replacements.length > 0 && (
-                              <p className="text-xs mt-1 text-green-500">Suggestion: {item.replacements[0].value || item.replacements[0]}</p>
-                            )}
-                          </div>
+                    <div className="space-y-3">
+                      {grammarResults.map((item, idx) => (
+                        <div key={item.id || idx} className={`p-3 rounded-md border ${props.theme === 'light' ? 'border-blue-50' : 'border-gray-600'}`}>
+                          <div className="flex items-start justify-between">
+                            <div>
+                              <p className="text-sm font-semibold">{item.message}</p>
+                              {item.context && item.context.text && (
+                                <p className="text-xs mt-1 text-gray-500">"{item.context.text}"</p>
+                              )}
+                              {item.replacements && item.replacements.length > 0 && (
+                                <p className="text-xs mt-1 text-green-500">Suggestion: {item.replacements[0].value || item.replacements[0]}</p>
+                              )}
+                            </div>
 
-                          <div className="flex flex-col items-end gap-2">
-                            <button
-                              onClick={() => setGrammarResults((prev) => prev.filter((_, i) => i !== idx))}
-                              className="text-xs px-2 py-1 rounded hover:bg-gray-200 dark:hover:bg-gray-700"
-                            >
-                              Dismiss
-                            </button>
+                            <div className="flex flex-col items-end gap-2">
+                              <button
+                                onClick={() => setGrammarResults((prev) => prev.filter((_, i) => i !== idx))}
+                                className="text-xs px-2 py-1 rounded hover:bg-gray-200 dark:hover:bg-gray-700"
+                              >
+                                Dismiss
+                              </button>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    ))}
+                      ))}
+                    </div>
                   </div>
                 </div>
-              </div>
-            </section>
-          )}
+              </section>
+            )}
+          </div>
+          <div className="lg:w-30/100">
+            <SummaryCard 
+            theme={props.theme}
+            t={t}
+            text={text}
+            topWords={topWords}
+            previewText={previewText}
+            isBold={isBold}
+            isItalic={isItalic}
+            isUnderline={isUnderline}
+            isStrike={isStrike}
+          />
+          </div>
+          
         </div>
+        
 
         {/* FUNCTION BUTTONS */}
         <div
-          className="flex flex-wrap gap-2 my-16"
+          className="flex flex-wrap gap-2 my-6"
           data-aos="fade-up"
           data-aos-delay="200"
           data-aos-duration="800"
@@ -272,19 +289,7 @@ const TextForm = (props) => {
         </div>
       </div>
 
-      {/* SUMMARY CARD */}
-      {/* FIX 3: Merged the two `className` attributes into one. */}
-      <SummaryCard 
-        theme={props.theme}
-        t={t}
-        text={text}
-        topWords={topWords}
-        previewText={previewText}
-        isBold={isBold}
-        isItalic={isItalic}
-        isUnderline={isUnderline}
-        isStrike={isStrike}
-      />
+      
 
       {dialogBoxOpen && (
         <DialogBox

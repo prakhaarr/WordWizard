@@ -39,11 +39,11 @@ const SummaryCard = ({
         {t("textForm.summary")}
       </h2>
 
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-8 text-center place-items-center">
+      <div className=" sm:grid-cols-3 gap-6 mb-8 text-center place-items-center">
         {cards.map((c, idx) => (
           <div
             key={c.id}
-            className={`w-[95%] md:w-full p-4 rounded-xl border shadow-sm transition duration-300 hover:scale-105 hover:shadow-lg hover:shadow-purple-700
+            className={`w-[95%] lg:h-20 p-4 mb-6 rounded-xl border shadow-sm transition duration-300 hover:scale-105 hover:shadow-lg hover:shadow-purple-700
               ${theme === "light"
                 ? "bg-gradient-to-r from-yellow-200 to-yellow-300 border-yellow-400"
                 : "bg-gradient-to-r from-gray-800 to-gray-700 border-gray-700"
