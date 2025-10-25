@@ -133,19 +133,21 @@ const TextForm = (props) => {
           <div className="mb-6 lg:w-70/100" data-aos="fade-down" data-aos-duration="800">
             <h1 className="text-3xl font-bold mb-6">{t("textForm.title")}</h1>
 
-            <Toolbar
-              textOperations={textOperations}
-              theme={props.theme}
-              colorTheme={props.colorTheme}
-              loadingGrammar={loadingGrammar}
-              text={text}
-              activeStyles={{
-                Bold: isBold,
-                Italic: isItalic,
-                Underline: isUnderline,
-                Strikethrough: isStrike,
-              }}
-            />
+            <div data-aos="fade-right">
+              <Toolbar
+                textOperations={textOperations}
+                theme={props.theme}
+                colorTheme={props.colorTheme}
+                loadingGrammar={loadingGrammar}
+                text={text}
+                activeStyles={{
+                  Bold: isBold,
+                  Italic: isItalic,
+                  Underline: isUnderline,
+                  Strikethrough: isStrike,
+                }}
+              />
+            </div>
 
             <textarea
               className={`w-full p-4 h-[80%] rounded-lg border-2 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 ${props.theme === "light"
@@ -228,7 +230,7 @@ const TextForm = (props) => {
               </section>
             )}
           </div>
-          <div className="lg:w-30/100">
+          <div className="lg:w-30/100" data-aos="fade-left">
             <SummaryCard 
             theme={props.theme}
             t={t}
@@ -248,7 +250,7 @@ const TextForm = (props) => {
         {/* FUNCTION BUTTONS */}
         <div
           className="flex flex-wrap gap-2 my-6"
-          data-aos="fade-up"
+          data-aos="fade-in"
           data-aos-delay="200"
           data-aos-duration="800"
         >
