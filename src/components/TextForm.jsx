@@ -258,7 +258,6 @@ const TextForm = (props) => {
                 <button
                   onClick={() => {
                     setActiveOperation(op.id);
-                    setTimeout(() => setActiveOperation(null), 300);
                     // generate a random number between 1 and 10
                     const randomCount = Math.floor(Math.random() * 10) + 1;
                     op.func(randomCount);
@@ -283,7 +282,6 @@ const TextForm = (props) => {
                 }
                 onClick={() => {
                   setActiveOperation(op.id);
-                  setTimeout(() => setActiveOperation(null), 300);
                   op.func();
                 }}
                 style={{
