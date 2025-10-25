@@ -5,6 +5,7 @@ import Toolbar from "./Toolbar";
 import Aos from "aos";
 import { useTranslation } from "react-i18next";
 import SummaryCard from "./SummaryCard";
+import { importFile } from "../utils";
 
 const TextForm = (props) => {
   const [text, setText] = useState("");
@@ -31,18 +32,17 @@ const TextForm = (props) => {
   };
 
   const handleFileImport = (file) => {
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = (ev) => {
-      const content = ev.target.result;
-      setText(content);
-      setPreviewText(content);
-      props.showAlert(t("alerts.fileImported"), "success");
-    };
-    reader.onerror = () => {
-      props.showAlert(t("alerts.fileError"), "error");
-    };
-    reader.readAsText(file, "utf-8");
+    importFile(
+      file,
+      (content) => {
+        setText(content);
+        setPreviewText(content);
+        props.showAlert(t("alerts.fileImported"), "success");
+      },
+      () => {
+        props.showAlert(t("alerts.fileError"), "error");
+      }
+    );
   };
 
   const handleFileInputClick = () => {

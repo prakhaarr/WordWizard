@@ -56,3 +56,27 @@ export const wordCount = (text) => {
   .split(/\s+/)
   .filter((el) => el.length !== 0).length;
 };
+
+export const importFile = (file, callback, errorCallback) => {
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    const content = e.target.result;
+    callback(content);
+  };
+  reader.onerror = () => {
+    errorCallback();
+  };
+  reader.readAsText(file, "utf-8");
+};
+
+export const exportFile = (text, filename) => {
+  if (!text) return;
+  const blob = new Blob([text], { type: "text/plain" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  a.click();
+  URL.revokeObjectURL(url);
+};
