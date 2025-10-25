@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { HashRouter as Router, Routes, Route } from "react-router-dom";
+import { importFile, exportFile } from "./utils";
 
 
 // Components
@@ -23,25 +24,22 @@ function App() {
   const [text, setText] = useState("");
 
   const handleFileImport = (file) => {
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      const content = e.target.result;
-      setText(content);
-    };
-    reader.readAsText(file, "utf-8");
+    importFile(
+      file,
+      (content) => {
+        setText(content);
+        showAlert("File imported successfully!", "success");
+      },
+      () => {
+        showAlert("Failed to import file.", "error");
+      }
+    );
   };
 
   // Export handler
   const handleExport = () => {
-    if (!text) return;
-    const blob = new Blob([text], { type: "text/plain" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "exported_text.txt";
-    a.click();
-    URL.revokeObjectURL(url);
+    exportFile(text, "exported_text.txt");
+    showAlert("Text exported successfully!", "success");
   };
 
   const allThemes = [
