@@ -125,7 +125,7 @@ const TextForm = (props) => {
       className={`min-h-screen py-8 ${props.theme === "light" ? "text-gray-900" : "text-white"
         }`}
     >
-      <div className="container mx-auto px-4 max-w-4xl">
+      <div className="container mx-auto px-10 lg:gap-5  lg:flex">
         <div className="mb-6" data-aos="fade-down" data-aos-duration="800">
           <h1 className="text-3xl font-bold mb-6">{t("textForm.title")}</h1>
 
@@ -227,7 +227,7 @@ const TextForm = (props) => {
 
         {/* FUNCTION BUTTONS */}
         <div
-          className="flex flex-wrap gap-2 my-6"
+          className="flex flex-wrap gap-2 my-16"
           data-aos="fade-up"
           data-aos-delay="200"
           data-aos-duration="800"
