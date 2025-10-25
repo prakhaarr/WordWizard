@@ -17,6 +17,7 @@ const TextForm = (props) => {
   const [isStrike, setIsStrike] = useState(false);
   const [grammarResults, setGrammarResults] = useState([]);
   const [loadingGrammar, setLoadingGrammar] = useState(false);
+  const [activeOperation, setActiveOperation] = useState(null);
 
   const fileInputRef = React.useRef();
 
@@ -69,6 +70,7 @@ const TextForm = (props) => {
       setIsStrike,
     },
     handleFileInputClick,
+    setActiveOperation,
   );
 
   useEffect(() => {
@@ -78,6 +80,7 @@ const TextForm = (props) => {
       setIsItalic(false);
       setIsUnderline(false);
       setIsStrike(false);
+      setActiveOperation(null);
     }
   }, [text]);
 
@@ -130,19 +133,21 @@ const TextForm = (props) => {
           <div className="mb-6 lg:w-70/100" data-aos="fade-down" data-aos-duration="800">
             <h1 className="text-3xl font-bold mb-6">{t("textForm.title")}</h1>
 
-            <Toolbar
-              textOperations={textOperations}
-              theme={props.theme}
-              colorTheme={props.colorTheme}
-              loadingGrammar={loadingGrammar}
-              text={text}
-              activeStyles={{
-                Bold: isBold,
-                Italic: isItalic,
-                Underline: isUnderline,
-                Strikethrough: isStrike,
-              }}
-            />
+            <div data-aos="fade-right">
+              <Toolbar
+                textOperations={textOperations}
+                theme={props.theme}
+                colorTheme={props.colorTheme}
+                loadingGrammar={loadingGrammar}
+                text={text}
+                activeStyles={{
+                  Bold: isBold,
+                  Italic: isItalic,
+                  Underline: isUnderline,
+                  Strikethrough: isStrike,
+                }}
+              />
+            </div>
 
             <textarea
               className={`w-full p-4 h-[80%] rounded-lg border-2 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 ${props.theme === "light"
@@ -225,7 +230,7 @@ const TextForm = (props) => {
               </section>
             )}
           </div>
-          <div className="lg:w-30/100">
+          <div className="lg:w-30/100" data-aos="fade-left">
             <SummaryCard 
             theme={props.theme}
             t={t}
@@ -245,7 +250,7 @@ const TextForm = (props) => {
         {/* FUNCTION BUTTONS */}
         <div
           className="flex flex-wrap gap-2 my-6"
-          data-aos="fade-up"
+          data-aos="fade-in"
           data-aos-delay="200"
           data-aos-duration="800"
         >
@@ -254,12 +259,17 @@ const TextForm = (props) => {
               <div key={i} className="flex items-center gap-2">
                 <button
                   onClick={() => {
+                    setActiveOperation(op.id);
                     // generate a random number between 1 and 10
                     const randomCount = Math.floor(Math.random() * 10) + 1;
                     op.func(randomCount);
                   }}
-                  style={buttonStyle}
-                  className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 hover:scale-105 active:scale-95 cursor-pointer`}
+                  style={{
+                    ...buttonStyle,
+                    opacity: activeOperation === op.id ? 0.6 : 1,
+                    transform: activeOperation === op.id ? 'scale(0.95)' : 'scale(1)',
+                  }}
+                  className={`px-4 py-2 rounded-lg font-medium transition-all duration-300 hover:scale-105 active:scale-95 cursor-pointer`}
                 >
                   {op.id === "grammar-check" && loadingGrammar ? t("textForm.checking") : op.label}
                 </button>
@@ -272,9 +282,16 @@ const TextForm = (props) => {
                   (!(text && text.trim().length > 0) && !op.allowEmpty) ||
                   (op.id === "grammar-check" && loadingGrammar)
                 }
-                onClick={op.func}
-                style={buttonStyle}
-                className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 ${(!(text && text.trim().length > 0) && !op.allowEmpty) ||
+                onClick={() => {
+                  setActiveOperation(op.id);
+                  op.func();
+                }}
+                style={{
+                  ...buttonStyle,
+                  opacity: activeOperation === op.id ? 0.6 : 1,
+                  transform: activeOperation === op.id ? 'scale(0.95)' : 'scale(1)',
+                }}
+                className={`px-4 py-2 rounded-lg font-medium transition-all duration-300 ${(!(text && text.trim().length > 0) && !op.allowEmpty) ||
                   (op.id === "grammar-check" && loadingGrammar)
                   ? "opacity-50 cursor-not-allowed"
                   : "hover:scale-105 active:scale-95"

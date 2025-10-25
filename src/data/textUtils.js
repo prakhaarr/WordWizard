@@ -10,7 +10,8 @@ export const getTextOperations = (
   setGrammarResults,
   setLoadingGrammar,
   styles,
-  triggerFileInput
+  triggerFileInput,
+  setActiveOperation
 ) => {
   const { isBold, setIsBold, isItalic, setIsItalic, isUnderline, setIsUnderline, isStrike, setIsStrike } = styles;
 
