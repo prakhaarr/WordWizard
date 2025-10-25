@@ -24,9 +24,41 @@ jobs:
             
             // Define required sections from the issue template
             const requiredSections = [
-              { name: 'Issue Description', pattern: /##?\s*🐞\s*Issue Description/i, altPattern: /##?\s*Issue Description/i },
-              { name: 'Expected Behavior', pattern: /##?\s*✅\s*Expected Behavior/i, altPattern: /##?\s*Expected Behavior/i },
-              { name: 'Steps To Reproduce', pattern: /##?\s*⚙️\s*Steps To Reproduce/i, altPattern: /##?\s*Steps To Reproduce/i }
+              { 
+                name: 'Issue Description', 
+                patterns: [
+                  /##?\s*🐞\s*Issue Description/i,
+                  /##?\s*Issue Description/i,
+                  /🐞\s*Issue Description/i,
+                  /Issue Description\s*:/i,
+                  /Issue Description\s*-/i,
+                  /Bug Description\s*:/i,
+                  /Problem Description\s*:/i
+                ]
+              },
+              { 
+                name: 'Expected Behavior', 
+                patterns: [
+                  /##?\s*✅\s*Expected Behavior/i,
+                  /##?\s*Expected Behavior/i,
+                  /✅\s*Expected Behavior/i,
+                  /Expected Behavior\s*:/i,
+                  /Expected Behavior\s*-/i,
+                  /Expected Result\s*:/i
+                ]
+              },
+              { 
+                name: 'Steps To Reproduce', 
+                patterns: [
+                  /##?\s*⚙️\s*Steps To Reproduce/i,
+                  /##?\s*Steps To Reproduce/i,
+                  /⚙️\s*Steps To Reproduce/i,
+                  /Steps To Reproduce\s*:/i,
+                  /Steps To Reproduce\s*-/i,
+                  /Reproduction Steps\s*:/i,
+                  /How to Reproduce\s*:/i
+                ]
+              }
             ];
             
             const missingOrEmpty = [];
@@ -34,14 +66,17 @@ jobs:
             
             // Check for required sections
             for (const section of requiredSections) {
-              const found = section.pattern.test(issueBody) || section.altPattern.test(issueBody);
+              const found = section.patterns.some(pattern => pattern.test(issueBody));
               
               if (!found) {
                 missingOrEmpty.push(section.name);
               } else {
                 // Check if section has content (not just comments or placeholders)
-                const sectionMatch = issueBody.match(new RegExp(`${section.pattern.source}[\\s\\S]*?(?=##|$)`, 'i')) ||
-                                   issueBody.match(new RegExp(`${section.altPattern.source}[\\s\\S]*?(?=##|$)`, 'i'));
+                let sectionMatch = null;
+                for (const pattern of section.patterns) {
+                  sectionMatch = issueBody.match(new RegExp(`${pattern.source}[\\s\\S]*?(?=##|$)`, 'i'));
+                  if (sectionMatch) break;
+                }
                 
                 if (sectionMatch) {
                   const sectionContent = sectionMatch[0]
@@ -58,8 +93,19 @@ jobs:
             }
             
             // Check if Steps To Reproduce section has numbered steps
-            const stepsSection = issueBody.match(/##?\s*⚙️\s*Steps To Reproduce[\s\S]*?(?=##|$)/i) ||
-                               issueBody.match(/##?\s*Steps To Reproduce[\s\S]*?(?=##|$)/i);
+            const stepsPatterns = [
+              /##?\s*⚙️\s*Steps To Reproduce[\s\S]*?(?=##|$)/i,
+              /##?\s*Steps To Reproduce[\s\S]*?(?=##|$)/i,
+              /⚙️\s*Steps To Reproduce[\s\S]*?(?=##|$)/i,
+              /Steps To Reproduce\s*:[\s\S]*?(?=##|\n\n|$)/i,
+              /Reproduction Steps\s*:[\s\S]*?(?=##|\n\n|$)/i
+            ];
+            
+            let stepsSection = null;
+            for (const pattern of stepsPatterns) {
+              stepsSection = issueBody.match(pattern);
+              if (stepsSection) break;
+            }
             
             if (stepsSection) {
               const hasNumberedSteps = /^\s*\d+\.\s+.+/m.test(stepsSection[0]);

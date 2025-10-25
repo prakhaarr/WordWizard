@@ -25,10 +25,48 @@ jobs:
             
             // Define required sections from the PR template
             const requiredSections = [
-              { name: 'Description', pattern: /##?\s*📝\s*Description/i, altPattern: /##?\s*Description/i },
-              { name: 'Type of Change', pattern: /##?\s*🔍\s*Type of Change/i, altPattern: /##?\s*Type of Change/i },
-              { name: 'How Has This Been Tested', pattern: /##?\s*🧪\s*How Has This Been Tested/i, altPattern: /##?\s*How Has This Been Tested/i },
-              { name: 'Checklist', pattern: /##?\s*🧠\s*Checklist/i, altPattern: /##?\s*Checklist/i }
+              { 
+                name: 'Description', 
+                patterns: [
+                  /##?\s*📝\s*Description/i,
+                  /##?\s*Description/i,
+                  /📝\s*Description/i,
+                  /Description\s*:/i,
+                  /Description\s*-/i
+                ]
+              },
+              { 
+                name: 'Type of Change', 
+                patterns: [
+                  /##?\s*🔍\s*Type of Change/i,
+                  /##?\s*Type of Change/i,
+                  /🔍\s*Type of Change/i,
+                  /Type of Change\s*:/i,
+                  /Type of Change\s*-/i
+                ]
+              },
+              { 
+                name: 'How Has This Been Tested', 
+                patterns: [
+                  /##?\s*🧪\s*How Has This Been Tested/i,
+                  /##?\s*How Has This Been Tested/i,
+                  /🧪\s*How Has This Been Tested/i,
+                  /How Has This Been Tested\s*:/i,
+                  /How Has This Been Tested\s*-/i,
+                  /Testing\s*:/i,
+                  /Tests?\s*:/i
+                ]
+              },
+              { 
+                name: 'Checklist', 
+                patterns: [
+                  /##?\s*🧠\s*Checklist/i,
+                  /##?\s*Checklist/i,
+                  /🧠\s*Checklist/i,
+                  /Checklist\s*:/i,
+                  /Checklist\s*-/i
+                ]
+              }
             ];
             
             const missingOrEmpty = [];
@@ -36,14 +74,17 @@ jobs:
             
             // Check for required sections
             for (const section of requiredSections) {
-              const found = section.pattern.test(prBody) || section.altPattern.test(prBody);
+              const found = section.patterns.some(pattern => pattern.test(prBody));
               
               if (!found) {
                 missingOrEmpty.push(section.name);
               } else {
                 // Check if section has content (not just comments or placeholders)
-                const sectionMatch = prBody.match(new RegExp(`${section.pattern.source}[\\s\\S]*?(?=##|$)`, 'i')) ||
-                                   prBody.match(new RegExp(`${section.altPattern.source}[\\s\\S]*?(?=##|$)`, 'i'));
+                let sectionMatch = null;
+                for (const pattern of section.patterns) {
+                  sectionMatch = prBody.match(new RegExp(`${pattern.source}[\\s\\S]*?(?=##|$)`, 'i'));
+                  if (sectionMatch) break;
+                }
                 
                 if (sectionMatch) {
                   const sectionContent = sectionMatch[0]
@@ -61,8 +102,18 @@ jobs:
             }
             
             // Check if at least one "Type of Change" checkbox is checked
-            const typeOfChangeSection = prBody.match(/##?\s*🔍\s*Type of Change[\s\S]*?(?=##|$)/i) ||
-                                       prBody.match(/##?\s*Type of Change[\s\S]*?(?=##|$)/i);
+            const typeOfChangePatterns = [
+              /##?\s*🔍\s*Type of Change[\s\S]*?(?=##|$)/i,
+              /##?\s*Type of Change[\s\S]*?(?=##|$)/i,
+              /🔍\s*Type of Change[\s\S]*?(?=##|$)/i,
+              /Type of Change\s*:[\s\S]*?(?=##|\n\n|$)/i
+            ];
+            
+            let typeOfChangeSection = null;
+            for (const pattern of typeOfChangePatterns) {
+              typeOfChangeSection = prBody.match(pattern);
+              if (typeOfChangeSection) break;
+            }
             
             if (typeOfChangeSection) {
               const hasCheckedBox = /- \[x\]/i.test(typeOfChangeSection[0]);
@@ -72,8 +123,18 @@ jobs:
             }
             
             // Check if at least one checklist item is checked
-            const checklistSection = prBody.match(/##?\s*🧠\s*Checklist[\s\S]*?(?=##|$)/i) ||
-                                    prBody.match(/##?\s*Checklist[\s\S]*?(?=##|$)/i);
+            const checklistPatterns = [
+              /##?\s*🧠\s*Checklist[\s\S]*?(?=##|$)/i,
+              /##?\s*Checklist[\s\S]*?(?=##|$)/i,
+              /🧠\s*Checklist[\s\S]*?(?=##|$)/i,
+              /Checklist\s*:[\s\S]*?(?=##|\n\n|$)/i
+            ];
+            
+            let checklistSection = null;
+            for (const pattern of checklistPatterns) {
+              checklistSection = prBody.match(pattern);
+              if (checklistSection) break;
+            }
             
             if (checklistSection) {
               const hasCheckedBox = /- \[x\]/i.test(checklistSection[0]);
