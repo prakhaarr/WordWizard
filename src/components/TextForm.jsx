@@ -16,6 +16,7 @@ const TextForm = (props) => {
   const [isStrike, setIsStrike] = useState(false);
   const [grammarResults, setGrammarResults] = useState([]);
   const [loadingGrammar, setLoadingGrammar] = useState(false);
+  const [activeOperation, setActiveOperation] = useState(null);
 
   const fileInputRef = React.useRef();
 
@@ -69,6 +70,7 @@ const TextForm = (props) => {
       setIsStrike,
     },
     handleFileInputClick,
+    setActiveOperation,
   );
 
   useEffect(() => {
@@ -78,6 +80,7 @@ const TextForm = (props) => {
       setIsItalic(false);
       setIsUnderline(false);
       setIsStrike(false);
+      setActiveOperation(null);
     }
   }, [text]);
 
@@ -254,12 +257,18 @@ const TextForm = (props) => {
               <div key={i} className="flex items-center gap-2">
                 <button
                   onClick={() => {
+                    setActiveOperation(op.id);
+                    setTimeout(() => setActiveOperation(null), 300);
                     // generate a random number between 1 and 10
                     const randomCount = Math.floor(Math.random() * 10) + 1;
                     op.func(randomCount);
                   }}
-                  style={buttonStyle}
-                  className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 hover:scale-105 active:scale-95 cursor-pointer`}
+                  style={{
+                    ...buttonStyle,
+                    opacity: activeOperation === op.id ? 0.6 : 1,
+                    transform: activeOperation === op.id ? 'scale(0.95)' : 'scale(1)',
+                  }}
+                  className={`px-4 py-2 rounded-lg font-medium transition-all duration-300 hover:scale-105 active:scale-95 cursor-pointer`}
                 >
                   {op.id === "grammar-check" && loadingGrammar ? t("textForm.checking") : op.label}
                 </button>
@@ -272,9 +281,17 @@ const TextForm = (props) => {
                   (!(text && text.trim().length > 0) && !op.allowEmpty) ||
                   (op.id === "grammar-check" && loadingGrammar)
                 }
-                onClick={op.func}
-                style={buttonStyle}
-                className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 ${(!(text && text.trim().length > 0) && !op.allowEmpty) ||
+                onClick={() => {
+                  setActiveOperation(op.id);
+                  setTimeout(() => setActiveOperation(null), 300);
+                  op.func();
+                }}
+                style={{
+                  ...buttonStyle,
+                  opacity: activeOperation === op.id ? 0.6 : 1,
+                  transform: activeOperation === op.id ? 'scale(0.95)' : 'scale(1)',
+                }}
+                className={`px-4 py-2 rounded-lg font-medium transition-all duration-300 ${(!(text && text.trim().length > 0) && !op.allowEmpty) ||
                   (op.id === "grammar-check" && loadingGrammar)
                   ? "opacity-50 cursor-not-allowed"
                   : "hover:scale-105 active:scale-95"
