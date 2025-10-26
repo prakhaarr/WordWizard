@@ -112,4 +112,13 @@ export const allThemes = [
     category: "vibrant",
     icon: "🔥",
   },
+  {
+    id: "neon-cyber",
+    name: "Neon Cyber",
+    gradient:
+      "linear-gradient(135deg, #1a1a1a 0%, #2a1a4a 40%, #4a1a6a 70%, #1a4acc 100%)",
+    preview: "from-gray-800 via-purple-900 to-blue-600",
+    category: "vibrant",
+    icon: "⚡",
+  },
 ];
