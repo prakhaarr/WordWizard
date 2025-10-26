@@ -116,8 +116,8 @@ export const allThemes = [
     id: "neon-cyber",
     name: "Neon Cyber",
     gradient:
-      "linear-gradient(135deg, #0a0a0a 0%, #1a0033 40%, #330066 70%, #0066cc 100%)",
-    preview: "from-black via-purple-950 to-blue-600",
+      "linear-gradient(135deg, #1a1a1a 0%, #2a1a4a 40%, #4a1a6a 70%, #1a4acc 100%)",
+    preview: "from-gray-800 via-purple-900 to-blue-600",
     category: "vibrant",
     icon: "⚡",
   },
