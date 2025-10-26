@@ -33,7 +33,7 @@ const BackToTopButton = ({ theme }) => {
   return (
     <button
       onClick={scrollToTop}
-      className={`fixed bottom-6 right-6 z-50 w-12 h-12 rounded-full shadow-lg transition-all duration-300 ease-in-out transform hover:scale-110 hover:-translate-y-1 active:scale-95 ${
+      className={`fixed bottom-6 right-6 z-50 w-12 h-12 rounded-full shadow-lg transition-all duration-300 ease-in-out transform hover:scale-110 hover:-translate-y-1 active:scale-95 cursor-pointer ${
         isDark
           ? "bg-gray-800 hover:bg-gray-700 text-white border border-gray-600 hover:border-gray-500"
           : "bg-white hover:bg-gray-50 text-gray-700 border border-gray-300 hover:border-gray-400"
