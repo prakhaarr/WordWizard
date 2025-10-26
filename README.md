@@ -2,7 +2,7 @@
 
 **A powerful text manipulation tool built with React and Vite for the modern web.**
 
-[![Netlify Status](https://api.netlify.com/api/v1/badges/YOUR-BADGE-ID/deploy-status)](https://wordwizard-texteditor.netlify.app)
+[![Live Demo](https://img.shields.io/website?url=https%3A%2F%2Fwordwizard-texteditor.netlify.app&up_color=brightgreen&up_message=online&down_message=offline&label=Live%20Demo)](https://wordwizard-texteditor.netlify.app)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 [![GitHub Stars](https://img.shields.io/github/stars/palchhinparihar/WordWizard)](https://github.com/palchhinparihar/WordWizard/stargazers)
@@ -85,20 +85,19 @@
    cd WordWizard
    ```
 
-2. **Install dependencies:**
+1. **Install dependencies:**
 
    ```bash
    npm install
    ```
 
-3. **Add .env file:**
+1. **Add .env file:**
 
-    ```
-    VITE_LANUGAGETOOL_API_URL=https://api.languagetool.org/v2/check
-    ```
-  > Anyone can call it, but rate-limited to 20 requests per minute per IP (approx).
+  ```env
+  VITE_LANUGAGETOOL_API_URL=https://api.languagetool.org/v2/check
+  ```
 
-3. **Start the development server:**
+1. **Start the development server:**
 
     ```bash
     npm run dev
