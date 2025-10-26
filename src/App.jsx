@@ -9,7 +9,8 @@ import Alert from "./components/Alert";
 import TextForm from "./components/TextForm";
 import About from "./components/About";
 import Welcome from "./components/Welcome";
-import Footer from "./components/Footer"; // ADD THIS
+import Footer from "./components/Footer";
+import BackToTopButton from "./components/BackToTopButton";
 
 function App() {
   const [currentThemeId, setCurrentThemeId] = useState(
@@ -226,6 +227,9 @@ function App() {
 
             {/* ADD FOOTER HERE */}
             <Footer theme={theme} />
+            
+            {/* Floating Back to Top Button */}
+            <BackToTopButton theme={theme} />
           </div>
         )}
       </Router>

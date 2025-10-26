@@ -1,15 +1,11 @@
 import React from "react";
-import { Heart, Github, Linkedin, ArrowUp } from "lucide-react";
+import { Heart, Github, Linkedin } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 const Footer = ({ theme }) => {
   const isDark = theme === "dark";
   const currentYear = new Date().getFullYear();
   const { t } = useTranslation();
-
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
 
   return (
     <footer
@@ -62,16 +58,6 @@ const Footer = ({ theme }) => {
                 >
                   {t("footer.about")}
                 </a>
-              </li>
-              <li>
-                <button
-                  onClick={scrollToTop}
-                  className={`transition-colors hover:underline flex items-center gap-1 cursor-pointer ${
-                    isDark ? "hover:text-blue-400" : "hover:text-blue-600"
-                  }`}
-                >
-                  {t("footer.backToTop")} <ArrowUp className="w-3 h-3" />
-                </button>
               </li>
             </ul>
           </div>
