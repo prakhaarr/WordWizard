@@ -1,8 +1,3 @@
----
-name: Pull Request
-about: Template for submitting pull requests
----
-
 ### 📝 Description
 
 <!-- A clear and concise description of what this PR does. -->
